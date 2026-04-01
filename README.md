@@ -1,142 +1,64 @@
-Cryptography Toolkit 
+# Cryptography Toolkit
 
-A simple, menu-driven Python application that demonstrates core cryptographic concepts such as hashing, symmetric encryption, and asymmetric encryption.  
-This project was developed as part of my cybersecurity internship at Codec Technologies to gain hands-on experience with cryptography algorithms.
+This was my first real Python project that actually felt useful. I built it during my CODEC Technologies internship to understand how cryptography actually works under the hood — not just what SHA-256 or RSA means in theory, but what happens when you actually run it.
 
-Project Overview
+It's a simple menu-driven terminal app.
 
-This toolkit allows users to:
-- Generate cryptographic hashes
-- Encrypt and decrypt messages using AES (password-based encryption)
-- Encrypt and decrypt messages using RSA (public/private key encryption)
+## What it does
 
-The focus of this project is "learning and understanding cryptographic fundamentals", not production-grade security.
+Three main things:
 
- Features Explained
+**Hashing** — type in any text, get back a SHA-256 or SHA-512 hash. The first time I ran this and saw the same input always produce the same output I understood why hashing is used for password storage. One-way, fixed length, no reversing it.
 
-1. Hashing
-- Converts input text into a fixed-length hash
-- Uses SHA-256 and SHA-512
-- Hashes are one-way and cannot be reversed
+**AES Encryption (Symmetric)** — encrypt a message with a password, decrypt it with the same password. Built on AES-256 with PBKDF2 key derivation. Simple to use, strong algorithm.
 
-- Commonly used for secure password storage
- 2. AES Encryption (Symmetric)
-- Encrypts text using a password
-- Same password is required for decryption
-- Uses AES-256 with a derived key
-- Suitable for protecting private messages
+**RSA Encryption (Asymmetric)** — generate a public/private key pair, encrypt with public key, decrypt with private key. This one took me the longest to understand but it clicked when I thought of it like a padlock — anyone can lock it, only you can open it.
 
- 3. RSA Encryption (Asymmetric)
-- Uses a public key to encrypt data
-- Uses a private key to decrypt data
-- RSA keys are generated and stored locally
-- Demonstrates real-world public-key cryptography concepts
+## How to run it
 
- Installation
-
- Requirements
-- Python 3.7 or newer
-
-Steps
-1. Clone or download this repository  
-2. Open a terminal in the project directory  
-3. Install dependencies:
-
-bash
+```bash
 pip install -r requirements.txt
-
-Running the Program
 python main.py
+```
 
-You will be shown a menu with numbered options.
-Simply choose an option and follow the prompts.
+You'll get a numbered menu — pick an option and follow the prompts.
 
-Menu Options 
+**Important:** Generate RSA keys first (Option 4) before trying RSA encryption. 
 
-Option 1 – Hash Text
-Enter any text
-View SHA-256 and SHA-512 hashes
-Hashes cannot be reversed
+## Menu options
 
-Option 2 – AES Encrypt
-Enter a message
-Enter a password (minimum 6 characters)
-Receive encrypted output
+| Option | What it does |
+|---|---|
+| 1 | Hash any text — SHA-256 and SHA-512 |
+| 2 | AES encrypt a message with a password |
+| 3 | AES decrypt — needs same password |
+| 4 | Generate RSA key pair — run this first |
+| 5 | RSA encrypt using public key |
+| 6 | RSA decrypt using private key |
+| 7 | Exit |
 
-Option 3 – AES Decrypt
-Paste the encrypted text
-Enter the same password
-Original message is displayed
 
-Option 4 – Generate RSA Keys
-Generates a public and private key pair
-Keys are saved in the keys/ folder
-Required before RSA encryption or decryption
+## What I actually learned building this
 
-Option 5 – RSA Encrypt
-Encrypts text using the public key
-Message length is limited (approximately 190 characters)
-Outputs encrypted text
+The difference between hashing and encryption finally made sense when I built both in the same project. Hashing is one-way — you can verify but never reverse. Encryption is two-way — you can get the original back if you have the key.
+Also learned the hard way that AES decryption fails silently if the password is wrong — spent 20 minutes debugging before I realised I was typing the password differently.
+RSA has a message size limit — around 190 characters with RSA-2048. Anything longer breaks. That limitation alone explains why real systems use RSA to exchange a symmetric key, then switch to AES for the actual data.
 
-Option 6 – RSA Decrypt
-Decrypts text using the private key
-Displays the original message
+## Tech used
 
-Option 7 – Exit
-Safely closes the program
+- Python 3
+- `cryptography` library — AES and hashing
+- `pycryptodome` — RSA
+- Algorithms: SHA-256, SHA-512, AES-256, RSA-2048 with OAEP padding, PBKDF2
 
-What I Learned from This Project
+## Common errors
 
-Through this project, I gained practical understanding of:
-The difference between hashing and encryption
-Symmetric vs asymmetric cryptography
-AES and RSA use-cases
-Password-based key derivation (PBKDF2)
-File handling for cryptographic keys
-Handling invalid input and runtime errors
-Security limitations in beginner-level implementations
+**ModuleNotFoundError** — run `pip install -r requirements.txt`
+**RSA keys not found** — run Option 4 first to generate keys
+**AES decryption failed** — wrong password or encrypted text got corrupted during copy paste
 
-Technical Details
 
-Languages & Libraries
+## Honest limitations
 
-Python 3
-cryptography (AES and hashing)
-pycryptodome (RSA)
+This is a learning project, not production code. The key storage has no password protection, there's no GUI, and file encryption isn't supported yet. Maybe I'll add those later when I have time.
 
-Algorithms Used:
-
-SHA-256, SHA-512
-AES-256
-RSA-2048 with OAEP padding
-PBKDF2 (100,000 iterations)
-
-Common Errors & Fixes
-ModuleNotFoundError
-
-Install dependencies using:
-pip install -r requirements.txt
-
-RSA keys not found
-
-Generate keys first using Option 4
-Then use RSA encryption or decryption options
-
-AES decryption failed
-
-Incorrect password entered
-Encrypted text was copied incorrectly
-
-Future Improvements
-
-Possible enhancements include:
-File encryption support
-Graphical user interface (GUI)
-Random salt generation for stronger security
-Password-protected private keys
-Support for additional cryptographic algorithms
-
-Conclusion
-
-This project helped me understand the practical implementation of core cryptographic concepts used in cybersecurity.
-While it is not intended for real-world secure communication, it provided valuable hands-on experience with hashing, encryption techniques, and key management, strengthening my foundation in applied cryptography.
